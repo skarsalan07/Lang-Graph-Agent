@@ -1,0 +1,71 @@
+input_schema:
+  ticket_id: str
+  customer_name: str
+  email: str
+  query: str
+  priority: str
+
+stages:
+  - name: INTAKE
+    mode: deterministic
+    abilities:
+      - { ability: accept_payload, mcp_server: COMMON }
+
+  - name: UNDERSTAND
+    mode: deterministic
+    abilities:
+      - { ability: parse_request_text, mcp_server: COMMON }
+      - { ability: extract_entities, mcp_server: ATLAS }
+
+  - name: PREPARE
+    mode: deterministic
+    abilities:
+      - { ability: normalize_fields, mcp_server: COMMON }
+      - { ability: enrich_records, mcp_server: ATLAS }
+      - { ability: add_flags_calculations, mcp_server: COMMON }
+
+  - name: ASK
+    mode: deterministic
+    abilities:
+      - { ability: clarify_question, mcp_server: ATLAS }
+
+  - name: WAIT
+    mode: deterministic
+    abilities:
+      - { ability: extract_answer, mcp_server: ATLAS }
+      - { ability: store_answer, mcp_server: ATLAS }
+
+  - name: RETRIEVE
+    mode: deterministic
+    abilities:
+      - { ability: knowledge_base_search, mcp_server: ATLAS }
+      - { ability: store_data, mcp_server: ATLAS }
+
+  - name: DECIDE
+    mode: non-deterministic
+    abilities:
+      - { ability: solution_evaluation, mcp_server: COMMON }
+      - { ability: escalation_decision, mcp_server: ATLAS }
+      - { ability: update_payload, mcp_server: COMMON }
+
+  - name: UPDATE
+    mode: deterministic
+    abilities:
+      - { ability: update_ticket, mcp_server: ATLAS }
+      - { ability: close_ticket, mcp_server: ATLAS }
+
+  - name: CREATE
+    mode: deterministic
+    abilities:
+      - { ability: response_generation, mcp_server: COMMON }
+
+  - name: DO
+    mode: deterministic
+    abilities:
+      - { ability: execute_api_calls, mcp_server: ATLAS }
+      - { ability: trigger_notifications, mcp_server: ATLAS }
+
+  - name: COMPLETE
+    mode: deterministic
+    abilities:
+      - { ability: output_payload, mcp_server: COMMON }
