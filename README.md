@@ -26,7 +26,7 @@ demonstrates **state persistence**, **deterministic sequences**, and **non-deter
 ---
 
 ## 🚀 Installation
-```bash
+```
 git clone https://github.com/skarsalan07/Lang-Graph-Agent
 pip install -r requirements.txt
 ```
